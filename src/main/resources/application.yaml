@@ -4,7 +4,10 @@ spring:
     username: postgres
     password: fidane
     driver-class-name: org.postgresql.Driver
-
+  security:
+    user:
+      name: Fidane
+      password: 1234
 
   jpa:
     hibernate:
@@ -15,4 +18,6 @@ spring:
         format_sql: true
 server:
   port: 7775
-
+jwt:
+  secret: 6vK0F7fZY4PbAlBPlZIVajxyIMkRjRjfbOZGLhFhZ+U=
+  expiration: 86400000
