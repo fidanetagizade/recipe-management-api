@@ -1,10 +1,13 @@
 package com.example.recipemanagementapi1.entity;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 
 @Data
@@ -29,7 +32,7 @@ public class User {
     private String lastname;
 
     @NotBlank
-    @Size(min = 5, message = "Password must be at least 5 characters long")
+    @Size(min = 8, message = "Password must be at least 8 characters long")
     @Column(nullable = false)
     private String password;
 
@@ -41,7 +44,6 @@ public class User {
 
     @Positive
     private Integer age;
-
 
 
 }
