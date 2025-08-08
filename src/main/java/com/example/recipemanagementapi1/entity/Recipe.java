@@ -8,6 +8,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
+
+// Rating entity-nin olduğu paket
+
+
+import java.util.ArrayList;
 
 
 @Data
@@ -15,17 +22,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "recipes")
+@Table(name = "recipes", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "description"}))
 
 public class Recipe {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @NotBlank
-    @Column(nullable = false)
-    private String author;
+    private Long id;
 
     @NotBlank
     @Column(nullable = false)
@@ -44,5 +47,11 @@ public class Recipe {
     @Column(nullable = false)
     private Difficulty difficulty;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rating> ratings = new ArrayList<>();
 
 }
