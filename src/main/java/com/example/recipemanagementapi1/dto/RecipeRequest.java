@@ -9,10 +9,6 @@ import lombok.Data;
 
 public class RecipeRequest {
 
-
-    private String author;
-
-
     private String title;
 
 
