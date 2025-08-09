@@ -13,9 +13,18 @@ import java.util.Set;
 @Service
 public interface RecipeService {
     RecipeResponse createRecipe(@Valid RecipeRequest recipeResponse);
+
     Set<RecipeResponse> getRecipes();
+
     public void deleteRecipe(Long id);
+
     RecipeResponse updateRecipe(Long id, @Valid RecipeRequest request);
+
     Set<RecipeResponse> getRecipesByDifficulty(Difficulty level);
+
     List<RecipeResponse> getRecipesByUserId();
+
+    List<RecipeResponse> getRecipesByIngredient(String ingredientName);
+
+
 }

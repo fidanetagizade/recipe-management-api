@@ -15,8 +15,11 @@ import lombok.NoArgsConstructor;
 public class IngredientResponse {
 
     private Long id;
+
     private String name;
+
     private Double quantity;
+
     private String unit;
 
 

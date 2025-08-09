@@ -2,7 +2,6 @@ package com.example.recipemanagementapi1.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,15 +24,15 @@ import java.util.List;
 
 
         @NotBlank
-        @Column(nullable = false, unique = true)
+        @Column(nullable = false)
         private String name;
 
 
-        @Column(nullable = false, unique = true)
+        @Column(nullable = false)
         private Double quantity;
 
         @NotBlank
-        @Column(nullable = false, unique = true)
+        @Column(nullable = false)
         private String unit;
 
         @ManyToMany(mappedBy = "ingredients")

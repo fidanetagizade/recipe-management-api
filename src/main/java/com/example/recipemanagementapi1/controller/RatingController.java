@@ -1,9 +1,9 @@
 package com.example.recipemanagementapi1.controller;
 
-
 import com.example.recipemanagementapi1.dto.RatingRequest;
 import com.example.recipemanagementapi1.dto.RatingResponse;
 import com.example.recipemanagementapi1.service.RatingService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +20,7 @@ public class RatingController {
     }
 
     @PostMapping
-    public ResponseEntity<RatingResponse> addOrUpdateRating(@RequestBody RatingRequest request) {
+    public ResponseEntity<RatingResponse> addOrUpdateRating(@RequestBody @Valid RatingRequest request) {
         RatingResponse response = ratingService.addOrUpdateRating(request.getRecipeId(), request.getRatingNumber());
         return ResponseEntity.ok(response);
     }

@@ -1,9 +1,11 @@
 package com.example.recipemanagementapi1.service.impl;
 
+import com.example.recipemanagementapi1.dto.IngredientResponse;
 import com.example.recipemanagementapi1.dto.RecipeRequest;
 import com.example.recipemanagementapi1.dto.RecipeResponse;
 
 import com.example.recipemanagementapi1.entity.Difficulty;
+import com.example.recipemanagementapi1.entity.Ingredient;
 import com.example.recipemanagementapi1.entity.Recipe;
 import com.example.recipemanagementapi1.entity.User;
 import com.example.recipemanagementapi1.repository.RecipeRepository;
@@ -17,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -34,7 +37,7 @@ public class RecipeServiceImpl implements RecipeService {
     RecipeResponse recipeResponse;
 
     private final UserRepository userRepository;
-    
+
     @Override
     public RecipeResponse createRecipe(RecipeRequest request) {
 
@@ -50,6 +53,25 @@ public class RecipeServiceImpl implements RecipeService {
                 .user(user)
                 .build();
 
+        if (request.getIngredients() != null) {
+            List<Ingredient> ingredients = request.getIngredients().stream()
+                    .map(ing -> Ingredient.builder()
+                            .name(ing.getName())
+                            .quantity(ing.getQuantity())
+                            .unit(ing.getUnit())
+                            .build())
+                    .toList();
+
+            recipe.setIngredients(ingredients);
+
+            ingredients.forEach(ingredient -> {
+                if (ingredient.getRecipes() == null) {
+                    ingredient.setRecipes(new ArrayList<>());
+                }
+                ingredient.getRecipes().add(recipe);
+            });
+        }
+
         Recipe savedRecipe = recipeRepository.save(recipe);
 
         return RecipeResponse.builder()
@@ -59,14 +81,19 @@ public class RecipeServiceImpl implements RecipeService {
                 .description(savedRecipe.getDescription())
                 .time(savedRecipe.getTime())
                 .difficulty(savedRecipe.getDifficulty())
+                .ingredients(savedRecipe.getIngredients().stream()
+                        .map(ing -> IngredientResponse.builder()
+                                .id(ing.getId())
+                                .name(ing.getName())
+                                .quantity(ing.getQuantity())
+                                .unit(ing.getUnit())
+                                .build())
+                        .toList())
                 .build();
     }
 
-
-
     @Override
     public Set<RecipeResponse> getRecipes() {
-
         List<Recipe> recipes = recipeRepository.findAll();
 
         return recipes.stream()
@@ -77,9 +104,20 @@ public class RecipeServiceImpl implements RecipeService {
                         .description(recipe.getDescription())
                         .time(recipe.getTime())
                         .difficulty(recipe.getDifficulty())
+                        .ingredients(
+                                recipe.getIngredients().stream()
+                                        .map(ing -> IngredientResponse.builder()
+                                                .id(ing.getId())
+                                                .name(ing.getName())
+                                                .quantity(ing.getQuantity())
+                                                .unit(ing.getUnit())
+                                                .build())
+                                        .toList()
+                        )
                         .build())
                 .collect(Collectors.toSet());
     }
+
 
     @Override
     public void deleteRecipe(Long id) {
@@ -150,5 +188,29 @@ public class RecipeServiceImpl implements RecipeService {
                 .collect(toList());
 
     }
+    @Override
+    public List<RecipeResponse> getRecipesByIngredient(String ingredientName) {
+        List<Recipe> recipes = recipeRepository.findByIngredientName(ingredientName);
+
+        return recipes.stream()
+                .map(recipe -> RecipeResponse.builder()
+                        .id(recipe.getId())
+                        .author(recipe.getUser().getFirstname() + " " + recipe.getUser().getLastname())
+                        .title(recipe.getTitle())
+                        .description(recipe.getDescription())
+                        .time(recipe.getTime())
+                        .difficulty(recipe.getDifficulty())
+                        .ingredients(recipe.getIngredients().stream()
+                                .map(ing -> IngredientResponse.builder()
+                                        .id(ing.getId())
+                                        .name(ing.getName())
+                                        .quantity(ing.getQuantity())
+                                        .unit(ing.getUnit())
+                                        .build())
+                                .toList())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
 
 }

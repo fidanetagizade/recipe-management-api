@@ -6,12 +6,10 @@ import com.example.recipemanagementapi1.entity.Difficulty;
 import com.example.recipemanagementapi1.service.RecipeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.Set;
 
@@ -60,4 +58,11 @@ public class RecipeController {
         List<RecipeResponse> recipes = recipeService.getRecipesByUserId();
         return ResponseEntity.ok(recipes);
     }
+
+    @GetMapping("/recipes/ingredient/{name}")
+    public ResponseEntity<List<RecipeResponse>> getRecipesByIngredient(@PathVariable String name) {
+        List<RecipeResponse> responses = recipeService.getRecipesByIngredient(name);
+        return ResponseEntity.ok(responses);
+    }
+
 }

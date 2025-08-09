@@ -20,4 +20,4 @@ server:
   port: 7775
 jwt:
   secret: 6vK0F7fZY4PbAlBPlZIVajxyIMkRjRjfbOZGLhFhZ+U=
-  expiration: 86400000
+  expiration: 900000

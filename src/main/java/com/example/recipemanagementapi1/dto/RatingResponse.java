@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 public class RatingResponse {
 
     private Double ratingNumber;
+
     private Long recipeId;
+
     private String author;
 }
